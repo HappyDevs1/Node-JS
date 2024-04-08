@@ -4,6 +4,8 @@ const router = express.Router()
 router.use(logger)
 
 router.get("/", (req, res) => {
+  //The line below is how we parse query param
+  console.log(req.query.name)
   res.send("User List")
 })
 
@@ -12,7 +14,15 @@ res.render("users/new")
 })
 
 router.post("/", (req, res) => {
-  console.log(res.body.firstName)
+  const isValid = true
+  if(isValid) {
+    users.push({firstName: req.body.firstName})
+    res.redirect(`/users/${users.length - 1}`)
+  } else {
+    console.log("Error")
+    res.render("users/new", {firstName: req.body.firstName})
+  }
+  console.log(req.body.firstName)
   res.send("Hi")
 })
 
@@ -24,6 +34,7 @@ router.route("/:id").get((req, res) => {
 }).delete((req, res) => {
   res.send(`Delete User With ID ${req.params.id}`)
 })
+
 //The code above is the same as the one below
 //router.get("/:id", (req, res) => {
 //  res.send(`Get User With ID ${req.params.id}`)

@@ -7,6 +7,7 @@ app.use(express.static("public"))
 app.use(express.urlencoded({extended: true}))
 //This code allow our server to be able to read EJS files
 app.set("view engine", "ejs")
+app.use(express.json())
 
 //This code connects our routes to our server, so that we can have access to all the routes created in the routes file
 const userRouter = require("./routes/users")
