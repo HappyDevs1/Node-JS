@@ -3,6 +3,7 @@
 const express = require("express"),
   app = express(),
   homeController = require("./controllers/homeController"),
+  errorController = require("./controllers/ErrorController")
   layouts = require("express-ejs-layouts");
 
 app.set("port", process.env.PORT || 3000);
