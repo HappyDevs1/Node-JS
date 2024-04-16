@@ -4,3 +4,6 @@ const mongoose = require("mongoose"),
  email: String,
  zipCode: Number
  });
+
+ module.exports = mongoose.model("Subscriber",
+  subscriberSchema);
