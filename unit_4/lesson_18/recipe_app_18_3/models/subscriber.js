@@ -17,7 +17,6 @@ const subscriberSchema = new mongoose.Schema({
     min: [10000, "Zip code too short"],
     max: 99999
   },
-  //An array is used in order to save users course because a user can enroll in many courses therefore it is a 1 to many relationship
   courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]
 });
 

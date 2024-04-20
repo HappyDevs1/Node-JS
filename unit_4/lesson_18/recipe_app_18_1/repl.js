@@ -1,15 +1,12 @@
 const mongoose = require("mongoose"),
   Subscriber = require("./models/subscriber"),
   Course = require("./models/course");
-
 var testCourse, testSubscriber;
-
 mongoose.connect(
   "mongodb://localhost:27017/recipe_db",
   { useNewUrlParser: true }
 );
 mongoose.Promise = global.Promise;
-
 Subscriber.remove({})
   .then(items => console.log(`Removed ${items.n} records!`))
   .then(() => {
@@ -54,7 +51,7 @@ Subscriber.remove({})
   .then(() => {
     return Subscriber.populate(testSubscriber, "courses");
   })
-  .then(subscriberCourses => console.log(subscriberCourses))
+  .then(subscriber => console.log(subscriber))
   .then(() => {
     return Subscriber.find({
       courses: mongoose.Types.ObjectId(testCourse._id)
