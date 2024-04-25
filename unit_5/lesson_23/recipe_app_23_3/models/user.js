@@ -38,7 +38,7 @@ const mongoose = require("mongoose"),
       }
     },
     {
-      timestamps: trfue
+      timestamps: true
     }
   );
 

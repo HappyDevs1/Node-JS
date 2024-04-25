@@ -9,6 +9,7 @@ const express = require("express"),
   expressSession = require("express-session"),
   cookieParser = require("cookie-parser"),
   connectFlash = require("connect-flash"),
+	expressValidator = require("express-validator"),
   errorController = require("./controllers/errorController"),
   homeController = require("./controllers/homeController"),
   subscribersController = require("./controllers/subscribersController"),
@@ -22,7 +23,7 @@ mongoose.connect(
   "mongodb://localhost:27017/recipe_db",
   { useNewUrlParser: true }
 );
-mongoose.set("useCreateIndex", true);   
+mongoose.set("useCreateIndex", true);
 
 const db = mongoose.connection;
 
@@ -65,6 +66,7 @@ router.use((req, res, next) => {
   res.locals.flashMessages = req.flash();
   next();
 });
+router.use(expressValidator());
 router.use(homeController.logRequestPaths);
 
 router.get("/", homeController.index);
@@ -72,7 +74,7 @@ router.get("/contact", homeController.getSubscriptionPage);
 
 router.get("/users", usersController.index, usersController.indexView);
 router.get("/users/new", usersController.new);
-router.post("/users/create", usersController.create, usersController.redirectView);
+router.post("/users/create", usersController.validate, usersController.create, usersController.redirectView);router.get("/users/login", usersController.login);
 router.get("/users/login", usersController.login);
 router.post("/users/login", usersController.authenticate, usersController.redirectView);
 router.get("/users/:id/edit", usersController.edit);
