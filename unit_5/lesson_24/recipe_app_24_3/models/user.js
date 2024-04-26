@@ -10,7 +10,6 @@ const mongoose = require("mongoose"),
       name: {
         first: {
           type: String,
-          
           trim: true
         },
         last: {
