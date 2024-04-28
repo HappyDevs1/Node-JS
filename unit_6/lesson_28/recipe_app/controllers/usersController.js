@@ -14,6 +14,7 @@ const User = require("../models/user"),
       zipCode: body.zipCode
     };
   };
+const token = process.env.TOKEN || "recipeT0k3n";
 
 module.exports = {
   index: (req, res, next) => {
@@ -178,6 +179,10 @@ module.exports = {
   //     next(new Error("Invalid API token."));
   //   }
   // },
+  verifyToken: (req, res, next) => {
+    if (req.query.apiToken === token) next();
+    else next(new Error("Invalid API token."));
+  },
   apiAuthenticate: (req, res, next) => {
     passport.authenticate("local", (errors, user) => {
       if (user) {
