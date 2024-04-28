@@ -24,9 +24,9 @@ const mongoose = require("mongoose"),
         lowercase: true,
         unique: true
       },
-      // apiToken: {
-      //   type: String
-      // },
+      apiToken: {
+        type: String
+      },
       zipCode: {
         type: Number,
         min: [1000, "Zip code too short"],
@@ -66,11 +66,11 @@ userSchema.pre("save", function(next) {
   }
 });
 
-// userSchema.pre("save", function(next) {
-//   let user = this;
-//   if (!user.apiToken) user.apiToken = randToken.generate(16);
-//   next();
-// });
+userSchema.pre("save", function(next) {
+  let user = this;
+  if (!user.apiToken) user.apiToken = randToken.generate(16);
+  next();
+});
 
 userSchema.plugin(passportLocalMongoose, {
   usernameField: "email"
