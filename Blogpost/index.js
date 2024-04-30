@@ -3,6 +3,8 @@
 
  const app = new express()
  const  ejs = require("ejs")
+
+
  app.set("view engine", "ejs")
 
  app.get("/", (req, res) => {
@@ -16,4 +18,8 @@
  })
  app.get("/contact", (req, res) => {
   res.render("contact")
+ })
+
+ app.listen(4000, () => {
+  console.log("The server is running on port 4000")
  })
