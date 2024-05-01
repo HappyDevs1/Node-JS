@@ -23,6 +23,9 @@
  app.get("/contact", (req, res) => {
   res.render("contact")
  })
+ app.get("/posts/new", (req, res) => {
+  res.render("create")
+ })
 
  app.listen(4000, () => {
   console.log("The server is running on port 4000")
