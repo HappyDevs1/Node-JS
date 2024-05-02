@@ -1,26 +1,19 @@
  const express = require("express")
- const path = require("path")
  const mongoose = require("mongoose")
  mongoose.connect("mongodb://localhost/my_database",
  {useNewUrlParser: true})
  const app = new express()
  const  ejs = require("ejs")
- const BlogPost = require("./models/BlogPost.js")
  const fileUpload =require("express-fileupload")
  const newPostController = require("./controllers/newPost.js")
-
- const Schema = mongoose.Schema;
- 
- const BlogPostSchema = new Schema({ 
-     title: String, 
-     body: String, 
-     username: String, 
-     datePosted:{ /* can declare property type with an object like this 
-     because we need 'default' */ 
-     type: Date, 
-     default: new Date() 
-     }   
-     });
+ const homeController = require("./controllers/home.js")
+ const storePostController = require("./controllers/storePost.js")
+ const getPostController = require("./controllers/getPost.js")
+ const validateMiddleWare = require("./middleware/validateMiddleware")
+ const customMiddleWare = (req, res, next) => {
+  console.log("Custom middle ware called")
+  next()
+}
 
  app.set("view engine", "ejs")
  app.use(express.static("public"))
@@ -28,40 +21,11 @@
  app.use(express.urlencoded({extended: true}))
  app.use(fileUpload())
 
- app.get("/", async (req, res) => {
-  const blogposts = await BlogPost.find({})
-  res.render("index", {blogposts: blogposts})
- })
-
-app.get('/post/:id',async (req,res)=>{ 
-  const blogpost = await BlogPost.findById(req.params.id)
-  res.render('post',{
-  blogpost
-  }) 
- })
- 
+ app.get("/", homeController)
+ app.get("/post/:id", getPostController)
+ app.get("/posts/store", storePostController)
  app.get("/posts/new", newPostController)
 
- app.post('/posts/store', async (req, res) => {             
-  let image = req.files.image;
-  image.mv(path.resolve(__dirname, "public/img", image.name), async (error) => {
-    await BlogPost.create(req.body, {
-      image: "/img/" + image.name
-    });
-    res.redirect("/");
-  });
-});
-
-const customMiddleWare = (req, res, next) => {
-  console.log("Custom middle ware called")
-  next()
-}
-const validateMiddleWare = (req, res, next) => {
-  if (req.files === null || req.body.title == null) {
-    return res.redirect("/posts/new")
-  }
-  next()
-}
 app.use(customMiddleWare)
 app.use("/posts/store", validateMiddleWare)
 
