@@ -7,6 +7,7 @@
  const  ejs = require("ejs")
  const BlogPost = require("./models/BlogPost.js")
  const fileUpload =require("express-fileupload")
+ const newPostController = require("./controllers/newPost.js")
 
  const Schema = mongoose.Schema;
  
@@ -50,9 +51,7 @@ app.get('/post/:id',async (req,res)=>{
   }) 
  })
  
- app.get("/posts/new", (req, res) => {
-  res.render("create")
- })
+ app.get("/posts/new", newPostController)
 
  app.post('/posts/store', async (req, res) => {             
   let image = req.files.image;
