@@ -11,6 +11,7 @@
  const getPostController = require("./controllers/getPost.js")
  const validateMiddleWare = require("./middleware/validateMiddleware")
  const layoutController = require("./controllers/layoutController.js")
+ const userController = require("./controllers/newUser.js")
  
 
  app.set("view engine", "ejs")
