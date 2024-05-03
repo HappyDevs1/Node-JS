@@ -10,10 +10,8 @@
  const storePostController = require("./controllers/storePost.js")
  const getPostController = require("./controllers/getPost.js")
  const validateMiddleWare = require("./middleware/validateMiddleware")
- const customMiddleWare = (req, res, next) => {
-  console.log("Custom middle ware called")
-  next()
-}
+ const layoutController = require("./controllers/layoutController.js")
+ 
 
  app.set("view engine", "ejs")
  app.use(express.static("public"))
@@ -21,13 +19,20 @@
  app.use(express.urlencoded({extended: true}))
  app.use(fileUpload())
 
+ const customMiddleWare = (req, res, next) => {
+  console.log("Custom middle ware called")
+  next()
+}
+app.use(customMiddleWare)
+app.use("/posts/store", validateMiddleWare)
+
  app.get("/", homeController)
  app.get("/post/:id", getPostController)
  app.get("/posts/store", storePostController)
  app.get("/posts/new", newPostController)
-
-app.use(customMiddleWare)
-app.use("/posts/store", validateMiddleWare)
+ app.get("/about", layoutController)
+ app.get("/contact", layoutController)
+ app.get("/post", layoutController)
 
 //  app.post("/posts/search", (req, res) => {
 //    const matchPosts = blogPost.find({body: req.body.title})
@@ -38,5 +43,5 @@ app.use("/posts/store", validateMiddleWare)
 //  })
 
  app.listen(3000, () => {
-  console.log("The server is running on port 4000")
+  console.log("The server is running on port 3000")
  })
