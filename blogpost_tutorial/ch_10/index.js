@@ -13,6 +13,7 @@
  const layoutController = require("./controllers/layoutController.js")
  const userController = require("./controllers/newUser.js")
  const storeUserController = require("./controllers/storeUser.js")
+ const loginController = require("./controllers/login.js")
  
 
  app.set("view engine", "ejs")
@@ -37,6 +38,7 @@ app.use("/posts/store", validateMiddleWare)
  app.get("/post", layoutController)
  app.get("/auth/register", userController)
  app.post("/users/register", storeUserController)
+ app.get("/auth/login", loginController)
 
 //  app.post("/posts/search", (req, res) => {
 //    const matchPosts = blogPost.find({body: req.body.title})
