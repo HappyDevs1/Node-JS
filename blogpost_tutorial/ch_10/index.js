@@ -1,6 +1,6 @@
  const express = require("express")
  const mongoose = require("mongoose")
- mongoose.connect("mongodb://localhost/my_database",
+ mongoose.connect("mongodb://localhost:27017",
  {useNewUrlParser: true})
  const app = new express()
  const  ejs = require("ejs")
