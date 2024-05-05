@@ -35,8 +35,8 @@ app.use("/posts/store", validateMiddleWare)
  app.get("/about", layoutController)
  app.get("/contact", layoutController)
  app.get("/post", layoutController)
- app.get("/auth/register", newUserController)
- app.post("users/register", storeUserController)
+ app.get("/auth/register", userController)
+ app.post("/users/register", storeUserController)
 
 //  app.post("/posts/search", (req, res) => {
 //    const matchPosts = blogPost.find({body: req.body.title})
