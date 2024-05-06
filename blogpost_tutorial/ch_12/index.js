@@ -15,13 +15,20 @@
  const storeUserController = require("./controllers/storeUser.js")
  const loginController = require("./controllers/login.js")
  const loginUserController = require("./controllers/loginUser.js")
+ const expressSession = require("express-session")
+ const flash = require("connect-flash")
  
+ app.use(expressSession({
+  secret: "keyboard cat"
+ }))
+ global.loggedIn = null
 
  app.set("view engine", "ejs")
  app.use(express.static("public"))
  app.use(express.json())
  app.use(express.urlencoded({extended: true}))
  app.use(fileUpload())
+ app.use(flash())
 
  const customMiddleWare = (req, res, next) => {
   console.log("Custom middle ware called")
