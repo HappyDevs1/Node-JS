@@ -47,7 +47,7 @@ app.use("/posts/store", validateMiddleWare)
 
  app.get("/", homeController)
  app.get("/post/:id", getPostController)
- app.get("/posts/store",authMiddleware ,storePostController)
+ app.post("/posts/store",authMiddleware ,storePostController)
  app.get("/posts/new",authMiddleware ,newPostController)
  app.get("/about", layoutController)
  app.get("/contact", layoutController)

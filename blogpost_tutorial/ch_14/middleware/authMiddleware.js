@@ -2,7 +2,7 @@ const User = require("../models/user")
 
 module.exports = async (req, res, next) => {
   try {
-    const user = await user.findById(req.session.userId);
+    const user = await User.findById(req.session.userId);
     if (!user) {
       return res.redirect("/")
     }
