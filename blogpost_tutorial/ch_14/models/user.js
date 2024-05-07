@@ -15,6 +15,8 @@ const UserSchema = new Schema({
   }
 })
 
+UserSchema.plugin(uniqueValidator)
+
 UserSchema.pre("save", function(next) {
   const user = this
 
@@ -23,8 +25,6 @@ UserSchema.pre("save", function(next) {
     next()
   })
 })
-
-UserSchema.plugin(uniqueValidator)
 
 //export model
 const User = mongoose.model("User", UserSchema)

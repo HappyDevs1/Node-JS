@@ -15,13 +15,21 @@
  const storeUserController = require("./controllers/storeUser.js")
  const loginController = require("./controllers/login.js")
  const loginUserController = require("./controllers/loginUser.js")
+ const logoutController = require("./controllers/logout.js")
+ const authMiddleware = require ("./middleware/authMiddleware.js")
  const expressSession = require("express-session")
  const flash = require("connect-flash")
  
  app.use(expressSession({
   secret: "keyboard cat"
  }))
+
  global.loggedIn = null
+
+ app.use("*", (req, res, next) => {
+  loggedIn = req.session.userId
+  next()
+ })
 
  app.set("view engine", "ejs")
  app.use(express.static("public"))
@@ -39,14 +47,15 @@ app.use("/posts/store", validateMiddleWare)
 
  app.get("/", homeController)
  app.get("/post/:id", getPostController)
- app.get("/posts/store", storePostController)
- app.get("/posts/new", newPostController)
+ app.get("/posts/store",authMiddleware ,storePostController)
+ app.get("/posts/new",authMiddleware ,newPostController)
  app.get("/about", layoutController)
  app.get("/contact", layoutController)
  app.get("/post", layoutController)
  app.get("/auth/register", userController)
  app.post("/users/register", storeUserController)
  app.get("/auth/login", loginController)
+ app.get("/auth/logout", logoutController)
  app.post("/users/login", loginUserController)
 
 //  app.post("/posts/search", (req, res) => {
