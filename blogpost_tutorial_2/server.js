@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-const db = require("./models/index")
+const db = require("./models")
 
   const createTutorial = function(tutorial) {
     return db.Tutorial.create(tutorial).then(docTutorial => {
@@ -24,7 +24,7 @@ const db = require("./models/index")
   //   );
   // };
 
-  //Code for embedding images with appropriate fields
+  // Code for embedding images with appropriate fields
   const createImage = function(tutorialId, image) {
     return db.Image.create(image).then(docImage => {
       console.log("\n>> Created Image:\n", docImage);
