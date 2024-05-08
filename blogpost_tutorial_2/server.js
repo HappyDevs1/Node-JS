@@ -1,13 +1,5 @@
 const mongoose = require("mongoose")
-const db = require("./models")
-
-mongoose
-  .connect("mongodb://localhost:27017/", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => {console.log("Sucessfully connect to MongoDB")})
-  .catch((err) => {console.error("Connection error", err)})
+const db = require("./models/index")
 
   const createTutorial = function(tutorial) {
     return db.Tutorial.create(tutorial).then(docTutorial => {
@@ -16,20 +8,40 @@ mongoose
     });
   };
   
+  // const createImage = function(tutorialId, image) {
+  //   console.log("\n>> Add Image:\n", image);
+  //   return db.Tutorial.findByIdAndUpdate(
+  //     tutorialId,
+  //     {
+  //       $push: {
+  //         images: {
+  //           url: image.url,
+  //           caption: image.caption
+  //         }
+  //       }
+  //     },
+  //     { new: true, useFindAndModify: false }
+  //   );
+  // };
+
+  //Code for embedding images with appropriate fields
   const createImage = function(tutorialId, image) {
-    console.log("\n>> Add Image:\n", image);
-    return db.Tutorial.findByIdAndUpdate(
-      tutorialId,
-      {
-        $push: {
-          images: {
-            url: image.url,
-            caption: image.caption
+    return db.Image.create(image).then(docImage => {
+      console.log("\n>> Created Image:\n", docImage);
+      return db.Tutorial.findByIdAndUpdate(
+        tutorialId,
+        {
+          $push: {
+            images: {
+              _id: docImage._id,
+              url: docImage.url,
+              caption: docImage.caption
+            }
           }
-        }
-      },
-      { new: true, useFindAndModify: false }
-    );
+        },
+        { new: true, useFindAndModify: false }
+      );
+    });
   };
   
   const run = async function() {

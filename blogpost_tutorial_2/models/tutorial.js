@@ -1,12 +1,25 @@
 const mongoose = require("mongoose");
 
-const Tutorial = mongoose.model(
-  "Tutorial",
+// const Tutorial = mongoose.model(
+//   "Tutorial",
+//   new mongoose.Schema({
+//     title: String,
+//     author: String,
+//     images: []
+//   })
+// );
+
+// module.exports = Tutorial;
+
+//Embedding images with appropriate fields
+const Image = mongoose.model(
+  "Image",
   new mongoose.Schema({
-    title: String,
-    author: String,
-    images: []
+    path: String,
+    url: String,
+    caption: String,
+    createdAt: Date
   })
 );
 
-module.exports = Tutorial;
+module.exports = Image;
