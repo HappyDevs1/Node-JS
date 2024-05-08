@@ -5,7 +5,13 @@ const Tutorial = mongoose.model(
   new mongoose.Schema({
     title: String,
     author: String,
-    images: []
+    images: [],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment"
+      }
+    ]
   })
 );
 

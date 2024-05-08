@@ -67,6 +67,17 @@ const db = require("./models")
     console.log("\n>> Tutorial:\n", tutorial);
   };
   
+  const createComment = function(tutorialId, comment) {
+    return db.Comment.create(comment).then(docComment => {
+      console.log("\n>> Created Comment:\n", docComment);
+  
+      return db.Tutorial.findByIdAndUpdate(
+        tutorialId,
+        { $push: { comments: docComment._id } },
+        { new: true, useFindAndModify: false }
+      );
+    });
+  };
   mongoose
     .connect("mongodb://localhost/bezkoder_db", {
       useNewUrlParser: true,
