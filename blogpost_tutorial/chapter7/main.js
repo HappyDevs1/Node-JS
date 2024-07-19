@@ -31,7 +31,7 @@ app.post('/posts/store', (req, res) => {
     let imageName = image.name;
 
     // Move the uploaded file to the public/img directory
-    image.mv(path.resolve(__dirname, 'public/img', imageName), async (error) => {
+    image.mv(path.resolve(__dirname, 'public/img', image.name), async (error) => {
         if (error) {
             return res.status(500).send(error);
         }
@@ -41,7 +41,7 @@ app.post('/posts/store', (req, res) => {
             await BlogPost.create({
                 title: req.body.title,
                 body: req.body.body,
-                image: '/img/' + imageName // Specify the full image file path
+                image: '/img/' + image.name // Specify the full image file path
             });
             res.redirect('/');
         } catch (err) {

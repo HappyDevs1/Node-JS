@@ -15,20 +15,15 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const BlogPost = require('./models/BlogPost');
 const fileUpload = require('express-fileupload');
-const getPostController = require("./controllers/getPost")
-const homeController = require('./controllers/home');
+
 const app = express();
 const ejs = require('ejs');
 app.set('view engine', 'ejs');
 
-// Serve static files from the 'public' directory
 app.use(express.static('public'));
-
-// Parse incoming request bodies in a middleware before your handlers, available under the req.body property
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Connect to MongoDB
 mongoose.connect('mongodb://localhost/my_database', { useUnifiedTopology: true, useNewUrlParser: true });
 
 const PORT = 4000;
@@ -40,45 +35,94 @@ app.use(session({
     saveUninitialized: false
 }));
 
-// Flash middleware for displaying flash messages
+// Flash middleware
 app.use(flash());
 
-// Variable to hold user authentication status
 global.loggedIn = null;
 app.use("*", (req, res, next) => {
-    // Set global variable 'loggedIn' based on user session
     loggedIn = req.session.userId;
     next();
 });
 
-// File upload middleware
 app.use(fileUpload());
+
+app.listen(PORT, () => {
+    console.log('App listening on port 4000');
+});
 
 // Routes
 
-// Home page route
-app.get('/', homeController);
+app.get('/', async (req, res) => {
+    const blogposts = await BlogPost.find({});
+    res.render('index', {
+        blogposts: blogposts
+    });
+});
 
-// Route to view a specific post
-app.get('/post/:id', getPostController);
+app.get('/about', (req, res) => {
+    res.render('about');
+});
 
-// Route to create a new post
+app.get('/contact', (req, res) => {
+    res.render('contact');
+});
+
+app.get('/samplepost', (req, res) => {
+    res.render('samplepost');
+});
+
+app.get('/post/:id', async (req, res) => {
+    const blogpost = await BlogPost.findById(req.params.id)
+    res.render('post', {
+        blogpost: blogpost
+    });
+});
+
+app.get('/posts/new', newPostController);
+
+app.get('/create', (req, res) => {
+    res.render('create');
+});
+
+app.post('/posts/store', async (req, res) => {
+    try {
+        let image = req.files.image;
+        await image.mv(path.resolve(__dirname, 'public/img', image.name));
+        await BlogPost.create({
+            ...req.body,
+            image: '/img/' + image.name
+        });
+        res.redirect('/');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/auth/register', newUserController);
+app.post('/users/register', storeUserController);
+
+app.get('/auth/login', loginController);
+app.post('/users/login', loginUserController);
+
+app.get('/auth/logout', logoutController);
+
 app.get('/posts/new', authMiddleware, newPostController);
+
 app.post('/posts/store', authMiddleware, storePostController);
 
-// Routes for user authentication
 app.get('/auth/register', redirectIfAuthenticatedMiddleware, newUserController);
 app.post('/users/register', redirectIfAuthenticatedMiddleware, storeUserController);
 app.get('/auth/login', redirectIfAuthenticatedMiddleware, loginController);
 app.post('/users/login', redirectIfAuthenticatedMiddleware, loginUserController);
 
-// Logout route
+// The below routes seem to be duplicated, so you can remove them.
+// app.get('/posts/new', authMiddleware, newPostController);
+// app.post('/posts/store', authMiddleware, storePostController);
+// app.get('/auth/register', redirectIfAuthenticatedMiddleware, newUserController);
+// app.post('/users/register', redirectIfAuthenticatedMiddleware, storeUserController);
+// app.get('/auth/login', redirectIfAuthenticatedMiddleware, loginController);
+// app.post('/users/login', redirectIfAuthenticatedMiddleware, loginUserController);
+
 app.get('/auth/logout', logoutController);
-
-// Route for handling 404 errors
 app.use((req, res) => res.render('notfound'));
-
-// Start the server
-app.listen(PORT, () => {
-    console.log('App listening on port 4000');
-});

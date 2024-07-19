@@ -1,12 +1,12 @@
 {
   "name": "main",
   "version": "1.0.0",
-  "description": "Beginning Node.js, Express & MongoDB Development",
+  "description": "Blog Post",
   "main": "main.js",
   "scripts": {
     "start": "nodemon main.js"
   },
-  "author": "Happy",
+  "author": "Desire Gwanzura",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
